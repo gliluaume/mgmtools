@@ -1,0 +1,8 @@
+#!/bin/sh
+
+npm run test
+if [ $?  ]; then
+  return 2
+fi;
+
+npm run lint

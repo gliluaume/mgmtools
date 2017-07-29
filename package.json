@@ -1,0 +1,19 @@
+{
+  "name": "mgmtools",
+  "version": "1.0.0",
+  "description": "tools for dummy things",
+  "main": "ndf.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/ndf.spec.js",
+    "lint": "eslint ."
+  },
+  "author": "moi",
+  "license": "ISC",
+  "dependencies": {
+    "command-line-args": "^4.0.6",
+    "moment": "^2.18.1"
+  }
+}

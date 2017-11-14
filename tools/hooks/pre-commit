@@ -1,7 +1,8 @@
 #!/bin/sh
 
 npm run test
-if [ $?  ]; then
+if [ $? -neq 0 ]; then
+  echo 'tests failed. Commit aborted.'
   return 2
 fi;
 

@@ -1,16 +1,10 @@
 #!/usr/bin/env bash
-
 . cmn.sh
 . cfg.sh
 
 MONTH=""
 YEAR=""
-
 HELPREQUESTED=false
-
-function help() {
-  "usage: $0 -y <year> -m <month>"
-}
 
 function parseArgs() {
   while [[ $# -gt 0 ]]
@@ -40,9 +34,10 @@ function parseArgs() {
 }
 
 function validateConfiguration() {
-  if [[ $HELPREQUESTED -eq true ]]
+  if [[ $HELPREQUESTED == "true" ]]
   then
-    return 0
+    echo "usage: $0 -y <year> -m <month>"
+    exit 2
   fi
 
   if [[ ! -d $TARGETDIR ]]
@@ -50,19 +45,29 @@ function validateConfiguration() {
     echo "target dir does not exist !"
     exit 11
   fi
+  checkDir $TARGETDIR "TARGETDIR"
+  checkDir $ACCOUNT_DIR "ACCOUNT_DIR"
+  checkDir $INVOICE_BASE "INVOICE_BASE"
+  checkDir $OUT_INVOICE_DIR "OUT_INVOICE_DIR"
+  checkDir $IN_INVOICE_DIR "IN_INVOICE_DIR"
+  checkDir $CHARGE_BASEDIR "CHARGE_BASEDIR"
 }
 
-function run() {
-  if [[ HELPREQUESTED ]]
+function checkDir() {
+  if [[ 2 -gt $# ]]
   then
-    help
-    return 4
-    echo "hola"
-    exit 12
+    echo "$0:${FUNCNAME[0]} variable not provided"
+    exit 100
+  fi
+
+  if [[ ! -d $1 ]]
+  then
+    echo "$2 does not exist! $1"
+    exit 11
   fi
 }
 
-echo "bashenv $BASH_ENV"
+
 if [[ "$BASH_ENV" == "UNIT_TEST" ]]
 then
   echo "running unit tests on $BASH_SOURCE through ${0##*/}"
@@ -75,12 +80,6 @@ then
   echo "test on $BASH_SOURCE ok"
   exit 10
 fi
-
-parseArgs $*
-
-echo "TARGETDIR:$TARGETDIR"
-echo "YEAR:$YEAR"
-echo "MONTH:$MONTH"
 
 
 function inInvoice() {
@@ -95,9 +94,15 @@ function charge() {
   echo "packaging charges"
   local NDF_DIR=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant/notes-de-frais"
   mkdir -p ${NDF_DIR}
+  checkDir ${CHARGE_BASEDIR}/${YEAR}-${MONTH} "ndf source dir"
   cp ${CHARGE_BASEDIR}/${YEAR}-${MONTH}/*.jpg ${NDF_DIR}
   echo "jour;categorie;type;montant" > ${NDF_DIR}/synthese.csv
   ls -1 ${NDF_DIR}/*.jpg | xargs -n 1 basename | awk -F"\." '{print $1}'| awk -F"-" '{print $1"_"$2"_"$3"_"$4}' | awk -F"_" '{print $3"-"$2"-"$1";"$4";"$5";"$6}' >> ${NDF_DIR}/synthese.csv
+  if [[ $(wc -l ${NDF_DIR}/synthese.csv | cut -d " " -f 1) -lt 2 ]]
+  then
+    echo "ERROR: no charge found!"
+    exit 11
+  fi
 }
 
 function outInvoice() {
@@ -118,9 +123,16 @@ function myZip() {
   echo "zipping"
   rm ${YEAR}-${MONTH}-pieces-comptables.zip
   cd ${TARGETDIR}
-  zip -b /tmp -r ${TARGETDIR}/${YEAR}-${MONTH}-pieces-comptables.zip pieces-comptables/${YEAR}-${MONTH}
+  zip -b /tmp -rm ${TARGETDIR}/${YEAR}-${MONTH}-pieces-comptables.zip pieces-comptables/${YEAR}-${MONTH}
   cd -
 }
+
+
+parseArgs $*
+validateConfiguration
+echo "TARGETDIR:$TARGETDIR"
+echo "YEAR:$YEAR"
+echo "MONTH:$MONTH"
 
 inInvoice
 charge

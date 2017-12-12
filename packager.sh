@@ -78,7 +78,7 @@ then
   assertString $MONTH "11" "month not set"
   assertInt 3 3 "wrong response by checkParameter"
   echo "test on $BASH_SOURCE ok"
-  exit 10
+  exit 0
 fi
 
 

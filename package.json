@@ -2,13 +2,13 @@
   "name": "mgmtools",
   "version": "1.0.0",
   "description": "tools for dummy things",
-  "main": "ndf.js",
+  "main": "packager.sh",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node test/ndf.spec.js",
-    "lint": "eslint ."
+    "test": "BASH_ENV=UNIT_TEST ./packager.sh",
+    "lint": "echo TODO"
   },
   "author": "moi",
   "license": "ISC",

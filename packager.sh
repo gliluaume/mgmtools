@@ -86,7 +86,7 @@ function inInvoice() {
   echo "packaging incoming invoices"
   local inInvoiceDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant"
   mkdir -p $inInvoiceDir
-  cp ${IN_INVOICE_DIR}/${YEAR}${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}${MONTH}*.jpg $inInvoiceDir
+  cp ${IN_INVOICE_DIR}/${YEAR}-${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.jpg $inInvoiceDir
 }
 
 

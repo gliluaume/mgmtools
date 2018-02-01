@@ -86,7 +86,7 @@ function inInvoice() {
   echo "packaging incoming invoices"
   local inInvoiceDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant"
   mkdir -p $inInvoiceDir
-  cp ${IN_INVOICE_DIR}/${YEAR}-${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.jpg $inInvoiceDir
+  cp ${IN_INVOICE_DIR}/${YEAR}${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.jpg $inInvoiceDir
 }
 
 
@@ -114,6 +114,13 @@ function outInvoice() {
 
 function accountDetails() {
   echo "packaging account details"
+
+  if [[ $(wc -l ${ACCOUNT_DIR}/${YEAR}${MONTH}* | cut -d " " -f 1) -lt 1 ]]
+  then
+    echo "ERROR: no account details found!"
+    exit 12
+  fi
+
   local outAccountDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/releves"
   mkdir -p $outAccountDir
   cp ${ACCOUNT_DIR}/${YEAR}${MONTH}* $outAccountDir

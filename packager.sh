@@ -98,9 +98,10 @@ function charge() {
   cp ${CHARGE_BASEDIR}/${YEAR}-${MONTH}/*.jpg ${NDF_DIR}
   echo "jour;categorie;type;montant" > ${NDF_DIR}/synthese.csv
   ls -1 ${NDF_DIR}/*.jpg | xargs -n 1 basename | awk -F"\." '{print $1}'| awk -F"-" '{print $1"_"$2"_"$3"_"$4}' | awk -F"_" '{print $3"-"$2"-"$1";"$4";"$5";"$6}' >> ${NDF_DIR}/synthese.csv
+
   if [[ $(wc -l ${NDF_DIR}/synthese.csv | cut -d " " -f 1) -lt 2 ]]
   then
-    echo "ERROR: no charge found!"
+    echo "ERROR: no charge found! Generated report does not contain data."
     exit 11
   fi
 }
@@ -115,9 +116,10 @@ function outInvoice() {
 function accountDetails() {
   echo "packaging account details"
 
-  if [[ $(wc -l ${ACCOUNT_DIR}/${YEAR}${MONTH}* | cut -d " " -f 1) -lt 1 ]]
+  if [[ $(ls ${ACCOUNT_DIR}/${YEAR}${MONTH}* | wc -l | cut -d " " -f 1) -lt 1 ]]
   then
     echo "ERROR: no account details found!"
+    echo "scanned pattern: ${ACCOUNT_DIR}/${YEAR}${MONTH}*"
     exit 12
   fi
 

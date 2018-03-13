@@ -7,6 +7,10 @@ YEAR=""
 HELPREQUESTED=false
 
 function parseArgs() {
+  if [[ $# -lt 1 ]]; then
+    HELPREQUESTED=true
+  fi
+
   while [[ $# -gt 0 ]]
   do
     local key="$1"
@@ -77,6 +81,8 @@ then
   assertString $YEAR "2017" "year not set"
   assertString $MONTH "11" "month not set"
   assertInt 3 3 "wrong response by checkParameter"
+  parseArgs
+  assertTrue $HELPREQUESTED "help requested not properly set on no arg"
   echo "test on $BASH_SOURCE ok"
   exit 0
 fi

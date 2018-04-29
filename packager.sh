@@ -99,9 +99,22 @@ function inInvoice() {
 function charge() {
   echo "packaging charges"
   local NDF_DIR=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant/notes-de-frais"
-  mkdir -p ${NDF_DIR}
   checkDir ${CHARGE_BASEDIR}/${YEAR}-${MONTH} "ndf source dir"
+
+  echo "packaging charges: add extension"
+  extension-adder.sh ${CHARGE_BASEDIR}/${YEAR}-${MONTH} "jpg"
+
+  echo "packaging charges: move to new folder"
+  mkdir -p ${NDF_DIR}
   cp ${CHARGE_BASEDIR}/${YEAR}-${MONTH}/*.jpg ${NDF_DIR}
+
+  echo "packaging charges: reduce images size"
+  for file in $(find ${NDF_DIR})
+  do
+    convert ${file} -resize 50% ${file}
+  done
+
+  echo "packaging charges: create synthesis"
   echo "jour;categorie;type;montant" > ${NDF_DIR}/synthese.csv
   ls -1 ${NDF_DIR}/*.jpg | xargs -n 1 basename | awk -F"\." '{print $1}'| awk -F"-" '{print $1"_"$2"_"$3"_"$4}' | awk -F"_" '{print $3"-"$2"-"$1";"$4";"$5";"$6}' >> ${NDF_DIR}/synthese.csv
 

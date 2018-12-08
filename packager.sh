@@ -88,7 +88,6 @@ then
   exit 0
 fi
 
-
 function inInvoice() {
   echo "packaging incoming invoices"
   local inInvoiceDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant"
@@ -96,6 +95,14 @@ function inInvoice() {
   cp ${IN_INVOICE_DIR}/${YEAR}${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.jpg $inInvoiceDir
   echo "packaging rent receipt"
   cp ${RENT_BASEDIR}/${YEAR}-${MONTH}*.pdf $inInvoiceDir
+  echo "packaging remainder"
+  mkdir $inInvoiceDir/reliquat
+  cp ${IN_INVOICE_DIR}/R-* $inInvoiceDir/reliquat
+  for fi in $(ls -1 $inInvoiceDir/reliquat)
+  do
+    newname=$(echo `basename $fi` | sed 's/^R-//')
+    mv $inInvoiceDir/reliquat/$fi $inInvoiceDir/reliquat/$newname
+  done
 }
 
 function charge() {

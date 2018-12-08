@@ -55,6 +55,7 @@ function validateConfiguration() {
   checkDir $OUT_INVOICE_DIR "OUT_INVOICE_DIR"
   checkDir $IN_INVOICE_DIR "IN_INVOICE_DIR"
   checkDir $CHARGE_BASEDIR "CHARGE_BASEDIR"
+  checkDir $RENT_BASEDIR "RENT_BASEDIR"
 }
 
 function checkDir() {
@@ -93,8 +94,9 @@ function inInvoice() {
   local inInvoiceDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant"
   mkdir -p $inInvoiceDir
   cp ${IN_INVOICE_DIR}/${YEAR}${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.jpg $inInvoiceDir
+  echo "packaging rent receipt"
+  cp ${RENT_BASEDIR}/${YEAR}-${MONTH}*.pdf $inInvoiceDir
 }
-
 
 function charge() {
   echo "packaging charges"
@@ -129,6 +131,7 @@ function synthesis() {
   fi
 
   keyInFile ${NDF_DIR}/synthese.csv "github"
+  keyInFile ${NDF_DIR}/synthese.csv "quittance"
   keyInFile ${NDF_DIR}/synthese.csv "egghead"
   keyInFile ${NDF_DIR}/synthese.csv "telephone"
 }

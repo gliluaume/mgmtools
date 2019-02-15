@@ -94,7 +94,7 @@ function inInvoice() {
   mkdir -p $inInvoiceDir
   cp ${IN_INVOICE_DIR}/${YEAR}${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.jpg $inInvoiceDir
   echo "packaging rent receipt"
-  cp ${RENT_BASEDIR}/${YEAR}-${MONTH}*.pdf $inInvoiceDir
+  cp ${RENT_BASEDIR}/${YEAR}${MONTH}*.pdf $inInvoiceDir
   echo "packaging remainder"
   mkdir $inInvoiceDir/reliquat
   cp ${IN_INVOICE_DIR}/R-* $inInvoiceDir/reliquat
@@ -128,7 +128,7 @@ function synthesis() {
   local NDF_DIR=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant/"
   echo "packaging charges: create synthesis"
   echo "jour;categorie;type;montant" > ${NDF_DIR}/synthese.csv
-  ls -1 ${NDF_DIR}/notes-de-frais/*.jpg | xargs -n 1 basename | awk -F"\." '{print $1}'| awk -F"-" '{print $1"_"$2"_"$3"_"$4}' | awk -F"_" '{print $3"-"$2"-"$1";"$4";"$5";-"$6}' >> ${NDF_DIR}/synthese.csv
+  ls -1 ${NDF_DIR}/notes-de-frais/*.jpg | xargs -n 1 basename | awk -F"\." '{print $1}'| awk -F"-" '{print $1"_"$2"_"$3"_"$4}' | awk -F"_" '{print $1"-"$2"-"$3";"$4";"$5";-"$6}' >> ${NDF_DIR}/synthese.csv
   find ${NDF_DIR} -maxdepth 1 -type f ! -name 'synthese.csv' | xargs -n 1 basename | awk -F"\." '{print $1}' | awk -F"-"  '{print substr($1,1,4)"-"substr($1,5,2)"-"substr($1,7,2)";"$2";"$3";-"$4}' >> ${NDF_DIR}/synthese.csv
 
   if [[ $(wc -l ${NDF_DIR}/synthese.csv | cut -d " " -f 1) -lt 2 ]]
@@ -138,7 +138,7 @@ function synthesis() {
   fi
 
   keyInFile ${NDF_DIR}/synthese.csv "github"
-  keyInFile ${NDF_DIR}/synthese.csv "quittance"
+  keyInFile ${NDF_DIR}/synthese.csv "loyer"
   keyInFile ${NDF_DIR}/synthese.csv "egghead"
   keyInFile ${NDF_DIR}/synthese.csv "telephone"
 }
@@ -146,7 +146,7 @@ function synthesis() {
 function keyInFile() {
   if [[ $(grep $2 $1 | wc -l | cut -d " " -f 1) -lt 1 ]]
   then
-    echo "ERROR: $2 file not found in synthesis."
+    echo "ERROR: $2 not found in synthesis."
     exit 11
   fi
 }

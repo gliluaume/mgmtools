@@ -188,6 +188,7 @@ echo "TARGETDIR:$TARGETDIR"
 echo "YEAR:$YEAR"
 echo "MONTH:$MONTH"
 
+letter-o-matic.sh -m $MONTH -y $YEAR
 inInvoice
 charge
 synthesis

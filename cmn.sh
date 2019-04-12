@@ -36,6 +36,20 @@ function assertTrue(){
   fi
 }
 
+function checkDir() {
+  if [[ 2 -gt $# ]]
+  then
+    echo "$0:${FUNCNAME[0]} variable not provided"
+    exit 100
+  fi
+
+  if [[ ! -d $1 ]]
+  then
+    echo "$2 does not exist! $1"
+    exit 11
+  fi
+}
+
 if [[ "$BASH_ENV" == "UNIT_TEST" ]]
 then
   echo "running unit tests on $BASH_SOURCE through ${0##*/}"

@@ -69,7 +69,7 @@ days=(31 28 31 30 31 30 31 31 30 31 30 31)
 
 function getDate {
   index=$(($1 - 1))
-  echo "le 1 "${month[$index]}" "$2
+  echo "le 18 "${month[$index]}" "$2
 }
 
 function getPeriod {
@@ -103,8 +103,9 @@ validateConfiguration
 date=$(getDate $MONTH $YEAR)
 period=$(getPeriod $MONTH $YEAR)
 
-oufilename=$RENT_BASEDIR/${YEAR}${MONTH}15-fourniture-loyer-40000.pdf
+outfilename=$RENT_BASEDIR/${YEAR}${MONTH}-fourniture-loyer-40000.pdf
+echo "out:$outfilename, date:$date, period:$period"
 sed -e "s/§DATE§/$date/g" quittance.tex -e "s/§PERIOD§/$period/g" > tmp.tex
-pdflatex tmp.tex
-mv tmp.pdf $oufilename 
-rm -f tmp.*
+# pdftex tmp.tex
+# mv tmp.pdf $outfilename 
+# rm -f tmp.*

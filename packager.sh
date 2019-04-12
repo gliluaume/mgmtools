@@ -58,21 +58,6 @@ function validateConfiguration() {
   checkDir $RENT_BASEDIR "RENT_BASEDIR"
 }
 
-function checkDir() {
-  if [[ 2 -gt $# ]]
-  then
-    echo "$0:${FUNCNAME[0]} variable not provided"
-    exit 100
-  fi
-
-  if [[ ! -d $1 ]]
-  then
-    echo "$2 does not exist! $1"
-    exit 11
-  fi
-}
-
-
 if [[ "$BASH_ENV" == "UNIT_TEST" ]]
 then
   echo "running unit tests on $BASH_SOURCE through ${0##*/}"
@@ -155,7 +140,7 @@ function outInvoice() {
   echo "packaging outgoing invoices"
   local outInvoiceDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/sortant"
   mkdir -p $outInvoiceDir
-  cp ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.jpg $outInvoiceDir
+  cp ${OUT_INVOICE_DIR}/${YEAR}/${YEAR}-${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}/${YEAR}-${MONTH}*.jpg $outInvoiceDir
 }
 
 function accountDetails() {
@@ -188,7 +173,7 @@ echo "TARGETDIR:$TARGETDIR"
 echo "YEAR:$YEAR"
 echo "MONTH:$MONTH"
 
-letter-o-matic.sh -m $MONTH -y $YEAR
+# letter-o-matic.sh -m $MONTH -y $YEAR
 inInvoice
 charge
 synthesis

@@ -74,7 +74,7 @@ then
 fi
 
 function inInvoice() {
-  echo "packaging incoming invoices"
+  echo -e "\npackaging incoming invoices"
   local inInvoiceDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant"
   mkdir -p $inInvoiceDir
   cp ${IN_INVOICE_DIR}/${YEAR}${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}-${MONTH}*.jpg $inInvoiceDir
@@ -91,12 +91,12 @@ function inInvoice() {
 }
 
 function charge() {
-  echo "packaging charges"
+  echo -e "\npackaging charges"
   local NDF_DIR=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/entrant/notes-de-frais"
   checkDir ${CHARGE_BASEDIR}/${YEAR}-${MONTH} "ndf source dir"
 
   echo "packaging charges: add extension"
-  extension-adder.sh ${CHARGE_BASEDIR}/${YEAR}-${MONTH} "jpg"
+  ./extension-adder.sh ${CHARGE_BASEDIR}/${YEAR}-${MONTH} "jpg"
 
   echo "packaging charges: move to new folder"
   mkdir -p ${NDF_DIR}
@@ -137,14 +137,14 @@ function keyInFile() {
 }
 
 function outInvoice() {
-  echo "packaging outgoing invoices"
+  echo -e "\npackaging outgoing invoices"
   local outInvoiceDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/sortant"
   mkdir -p $outInvoiceDir
   cp ${OUT_INVOICE_DIR}/${YEAR}/${YEAR}-${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}/${YEAR}-${MONTH}*.jpg $outInvoiceDir
 }
 
 function accountDetails() {
-  echo "packaging account details"
+  echo -e "\npackaging account details"
 
   if [[ $(ls ${ACCOUNT_DIR}/${YEAR}${MONTH}* | wc -l | cut -d " " -f 1) -lt 1 ]]
   then
@@ -160,7 +160,7 @@ function accountDetails() {
 
 function myZip() {
   echo "zipping"
-  rm ${YEAR}-${MONTH}-pieces-comptables.zip
+  rm -f ${YEAR}-${MONTH}-pieces-comptables.zip
   cd ${TARGETDIR}
   zip -b /tmp -rm ${TARGETDIR}/${YEAR}-${MONTH}-pieces-comptables.zip pieces-comptables/${YEAR}-${MONTH}
   cd -
@@ -173,7 +173,7 @@ echo "TARGETDIR:$TARGETDIR"
 echo "YEAR:$YEAR"
 echo "MONTH:$MONTH"
 
-# letter-o-matic.sh -m $MONTH -y $YEAR
+./letter-o-matic.sh -m $MONTH -y $YEAR
 inInvoice
 charge
 synthesis

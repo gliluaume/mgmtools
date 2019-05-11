@@ -106,6 +106,6 @@ period=$(getPeriod $MONTH $YEAR)
 outfilename=$RENT_BASEDIR/${YEAR}${MONTH}-fourniture-loyer-40000.pdf
 echo "out:$outfilename, date:$date, period:$period"
 sed -e "s/§DATE§/$date/g" quittance.tex -e "s/§PERIOD§/$period/g" > tmp.tex
-# pdftex tmp.tex
-# mv tmp.pdf $outfilename 
-# rm -f tmp.*
+pdflatex tmp.tex
+mv tmp.pdf $outfilename
+rm -f tmp.*

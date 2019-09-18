@@ -103,7 +103,7 @@ validateConfiguration
 date=$(getDate $MONTH $YEAR)
 period=$(getPeriod $MONTH $YEAR)
 
-outfilename=$RENT_BASEDIR/${YEAR}${MONTH}-fourniture-loyer-40000.pdf
+outfilename=$RENT_BASEDIR/${YEAR}${MONTH}18-fourniture-loyer-40000.pdf
 echo "out:$outfilename, date:$date, period:$period"
 sed -e "s/§DATE§/$date/g" quittance.tex -e "s/§PERIOD§/$period/g" > tmp.tex
 pdflatex tmp.tex

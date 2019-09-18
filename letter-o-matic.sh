@@ -98,14 +98,30 @@ fi
 
 # main
 parseArgs $*
-validateConfiguration
+# validateConfiguration
+
+amount=0
+charges=0
+if [[ "$YEAR$MONTH" > "201907" ]]
+then
+  charges=80
+  amount=520
+  street="32, avenue de la République"
+else
+  charges=50
+  amount=350
+  street="8, domaine de Château Gaillard"
+fi
+totalAmount=$(($amount + $charges))
+echo "date: $date, period: $period"
+echo "montant: $totalAmount = $amount + $charges"
 
 date=$(getDate $MONTH $YEAR)
 period=$(getPeriod $MONTH $YEAR)
 
-outfilename=$RENT_BASEDIR/${YEAR}${MONTH}18-fourniture-loyer-40000.pdf
+outfilename=$RENT_BASEDIR/${YEAR}${MONTH}18-fourniture-loyer-${amount}00.pdf
 echo "out:$outfilename, date:$date, period:$period"
-sed -e "s/§DATE§/$date/g" quittance.tex -e "s/§PERIOD§/$period/g" > tmp.tex
+sed -e "s/§DATE§/$date/g" quittance.tex -e "s/§PERIOD§/$period/g" -e "s/§TOTALAMOUNT§/$totalAmount/g" -e "s/§CHARGES§/$charges/g" -e "s/§AMOUNT§/$amount/g"  -e "s/§STREET§/$street/g" > tmp.tex
 pdflatex tmp.tex
 mv tmp.pdf $outfilename
 rm -f tmp.*

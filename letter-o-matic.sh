@@ -102,7 +102,7 @@ parseArgs $*
 
 amount=0
 charges=0
-if [[ "$YEAR$MONTH" > "201907" ]]
+if [[ "$YEAR$MONTH" > "201908" ]]
 then
   charges=80
   amount=520
@@ -113,8 +113,6 @@ else
   street="8, domaine de Château Gaillard"
 fi
 totalAmount=$(($amount + $charges))
-echo "date: $date, period: $period"
-echo "montant: $totalAmount = $amount + $charges"
 
 date=$(getDate $MONTH $YEAR)
 period=$(getPeriod $MONTH $YEAR)

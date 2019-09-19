@@ -68,12 +68,12 @@ month=("janvier"
 days=(31 28 31 30 31 30 31 31 30 31 30 31)
 
 function getDate {
-  index=$(($1 - 1))
+  index=$((10#$1 - 1))
   echo "le 18 "${month[$index]}" "$2
 }
 
 function getPeriod {
-  index=$(($1 - 1))
+  index=$((10#$1 - 1))
   echo "1 "${month[$index]}" "$2" au "${days[$index]}" "${month[$index]}" "$2
 }
 

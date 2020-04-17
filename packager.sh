@@ -124,7 +124,7 @@ function synthesis() {
 
   keyInFile ${NDF_DIR}/synthese.csv "github"
   keyInFile ${NDF_DIR}/synthese.csv "loyer"
-  keyInFile ${NDF_DIR}/synthese.csv "egghead"
+  # keyInFile ${NDF_DIR}/synthese.csv "egghead"
   keyInFile ${NDF_DIR}/synthese.csv "telephone"
 }
 

@@ -140,6 +140,12 @@ function outInvoice() {
   echo -e "\npackaging outgoing invoices"
   local outInvoiceDir=${TARGETDIR}/"pieces-comptables/${YEAR}-${MONTH}/sortant"
   mkdir -p $outInvoiceDir
+  if [[ $(ls ${OUT_INVOICE_DIR}/${YEAR}/${YEAR}-${MONTH}*.pdf | wc -l | cut -d " " -f 1) -lt 1 ]]
+  then
+    echo "ERROR: no out invoice!"
+    echo "scanned pattern: ${ACCOUNT_DIR}/${YEAR}${MONTH}*"
+    exit 10
+  fi
   cp ${OUT_INVOICE_DIR}/${YEAR}/${YEAR}-${MONTH}*.pdf ${OUT_INVOICE_DIR}/${YEAR}/${YEAR}-${MONTH}*.jpg $outInvoiceDir
 }
 

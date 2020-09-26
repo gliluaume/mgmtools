@@ -100,7 +100,7 @@ function charge() {
 
   echo "packaging charges: move to new folder"
   mkdir -p ${NDF_DIR}
-  cp ${CHARGE_BASEDIR}/${YEAR}-${MONTH}/*.jpg ${NDF_DIR}
+  cp ${CHARGE_BASEDIR}/${YEAR}-${MONTH}/*.{jpg,png} ${NDF_DIR}
 
   echo "packaging charges: reduce images size"
   for file in $(find ${NDF_DIR})
